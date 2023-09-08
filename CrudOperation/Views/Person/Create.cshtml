@@ -1,0 +1,76 @@
+﻿@model CrudOperation.Models.Person
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Person Entry</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="createForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>           
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent the default form submission.
+
+                var formData = $(this).serialize(); // Serialize the form data.
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create", "PersonController")',
+                    data: formData,
+                    success: function (response) {
+                        // Handle the success response here (e.g., show a success message, redirect, etc.).
+                        if (response.success) {
+                            // Assuming you want to redirect to the Index action on success
+                            window.location.href = '@Url.Action("Index", "Person")';
+                        } else {
+                            // Handle success = false here if needed
+                        }
+                    },
+                    error: function (error) {
+                        // Handle any errors here (e.g., display error messages).
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+}
