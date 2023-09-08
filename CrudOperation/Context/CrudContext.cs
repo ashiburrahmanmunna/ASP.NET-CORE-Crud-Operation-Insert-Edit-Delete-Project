@@ -10,5 +10,6 @@ namespace CrudOperation.Context
         }
 
         public DbSet<Employee>Employee { get; set; }
+        public DbSet<Person> Person { get; set; }
     }
 }
