@@ -30,7 +30,7 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary" onclick="On_Create()">Create</button>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -43,34 +43,42 @@
 
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#createForm').on('submit', function (e) {
-                e.preventDefault(); // Prevent the default form submission.
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-                var formData = $(this).serialize(); // Serialize the form data.
 
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Create", "PersonController")',
-                    data: formData,
-                    success: function (response) {
-                        // Handle the success response here (e.g., show a success message, redirect, etc.).
-                        if (response.success) {
-                            // Assuming you want to redirect to the Index action on success
-                            window.location.href = '@Url.Action("Index", "Person")';
-                        } else {
-                            // Handle success = false here if needed
-                        }
-                    },
-                    error: function (error) {
-                        // Handle any errors here (e.g., display error messages).
-                        console.error(error);
+    <script>      
+
+        function On_Create() {
+
+            var RelId = $("#RelId").val();
+            // alert(DesigId);
+            $.ajax({
+
+                url: '@Url.Action("Create", "PersonController")',
+               
+                data: JSON.stringify({ id: RelId }), //use id here
+                
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+                    debugger;
+                    if (result.Success == "1") {
+                        customFile('3', result.ex);
+                        window.setTimeout(function () {
+                            // Move to a new location or you can do something else
+                            window.location.href = '@Url.Action("Index", "PersonController")';
+                        }, 500);
                     }
-                });
+                    else {
+                        toastr.error(result.ex);
+                    }
+                }
             });
-        });
+        }
 
     </script>
-
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
